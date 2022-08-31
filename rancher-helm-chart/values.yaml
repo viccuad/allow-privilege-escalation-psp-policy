@@ -1,0 +1,35 @@
+# name: allow-privilege-escalation-psp
+# kind: ClusterAdmissionPolicy
+# namespace: default # used when kind is AdmissionPolicy
+# policy_module:
+#   repository: "registry://ghcr.io/kubewarden/policies/allow-privilege-escalation-psp"
+#   tag: "v0.1.11"
+# spec_mutating: true
+# spec_mode: "protect"
+# settings:
+#   default_allow_privilege_escalation: true
+
+
+---
+kind: ClusterAdmissionPolicy
+metadata:
+  name: allow-privilege-escalation-psp
+  namespace: default # used when kind is AdmissionPolicy
+spec:
+  module:
+    repository: "registry://ghcr.io/kubewarden/policies/allow-privilege-escalation-psp"
+    tag: "v0.1.11"
+  mode: "protect"
+  mutating: true
+  rules:
+    - apiGroups:
+        - ""
+      apiVersions:
+        - v1
+      resources:
+        - pods
+      operations:
+        - CREATE
+        - UPDATE
+  settings:
+    default_allow_privilege_escalation: true

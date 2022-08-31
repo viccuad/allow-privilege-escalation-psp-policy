@@ -1,0 +1,53 @@
+# This is a Rancher questions file
+---
+questions:
+- variable: "kind"
+  type: enum
+  options:
+    - "ClusterAdmissionPolicy"
+    - "AdmissionPolicy"
+  default: "ClusterAdmissionPolicy"
+  required: true
+  label: kind of policy resource
+  description: Either a cluster-wide policy (ClusterAdmissionPolicy) or a namespaced one (AdmissionPolicy)
+  group: Policy settings
+  show_subquestion_if: "AdmissionPolicy"
+  subquestions:
+    - variable: "metadata.namespace"
+      type: string
+      default: "default"
+      required: true
+      label: Namespace of the AdmissionPolicy
+      description: Namespace that the AdmissionPolicy will be deployed into and aply for.
+- variable: "spec.mode"
+  type: enum
+  options:
+    - "monitor"
+    - "protect"
+  default: "protect"
+  required: true
+  label: Execution mode of the policy
+  description: Execution mode of the policy. "protect" will reject requests,
+    "monitor" will log them. Transitioning from "monitor" to "protect" is
+    allowed, but not from "protect" to "monitor".
+  group: Policy settings
+- variable: "spec.mutating"
+  type: boolean
+  default: true
+  required: true
+  label: mutating
+  description: Whether the policy has the ability to mutate incoming requests or
+    not.
+  group: Policy settings
+
+- variable: "settings.default_allow_privilege_escalation"
+  type: boolean
+  default: true
+  required: true
+  label: Allow privilege escalation
+  description: This policy works by inspecting the containers and init containers
+    of a Pod. If any of these containers have `allowPrivilegeEscalation` enabled,
+    the Pod request will be flagged for rejection.
+  tooltip: Used to default to disallow, while still permitting pods to request allowPrivilegeEscalation
+    explicitly.
+  group: Policy settings
